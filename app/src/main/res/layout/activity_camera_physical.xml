@@ -146,7 +146,7 @@
         android:elevation="1dp"
         android:padding="5dp"
         android:layout_marginLeft="20dp"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorRed"
         android:textSize="20sp"
         android:text="@string/front_side"
         app:layout_constraintTop_toTopOf="parent"

@@ -156,7 +156,7 @@ public class CameraPhysicalActivity extends AppCompatActivity {
             cameraView.setVisibility(View.VISIBLE);
             viewFinder_View.setVisibility(View.VISIBLE);
             capture_btn.setVisibility(View.VISIBLE);
-            tvLabel.setVisibility(View.VISIBLE);
+            tvLabel.setVisibility(View.GONE);
             point_result.setVisibility(View.GONE);
             llButtons.setVisibility(View.GONE);
             switch_side.setVisibility(View.GONE);
@@ -258,7 +258,6 @@ public class CameraPhysicalActivity extends AppCompatActivity {
                 cameraView.setVisibility(View.VISIBLE);
                 viewFinder_View.setVisibility(View.VISIBLE);
                 capture_btn.setVisibility(View.VISIBLE);
-                tvLabel.setVisibility(View.VISIBLE);
                 point_result.setVisibility(View.GONE);
                 llButtons.setVisibility(View.GONE);
                 switch_side.setVisibility(View.GONE);
@@ -272,7 +271,6 @@ public class CameraPhysicalActivity extends AppCompatActivity {
                 cameraView.setVisibility(View.VISIBLE);
                 viewFinder_View.setVisibility(View.VISIBLE);
                 capture_btn.setVisibility(View.VISIBLE);
-                tvLabel.setVisibility(View.VISIBLE);
                 point_result.setVisibility(View.GONE);
                 llButtons.setVisibility(View.GONE);
                 switch_side.setVisibility(View.GONE);
