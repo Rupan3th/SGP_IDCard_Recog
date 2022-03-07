@@ -4,8 +4,15 @@
     <string name="dial">Dial</string>
     <string name="regex">Regex</string>
     <string name="gallery">Gallery</string>
+    <string name="digital_id">Digital ID</string>
+    <string name="physical_id">Physical ID</string>
     <string name="camera">Camera</string>
     <string name="copy">Copy</string>
     <string name="select_images">Select Images</string>
     <string name="numbers">Numbers</string>
+    <string name="front">Front</string>
+    <string name="back">Back</string>
+    <string name="front_side">front side</string>
+    <string name="back_side">back side</string>
+    front side
 </resources>

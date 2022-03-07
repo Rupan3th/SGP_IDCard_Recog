@@ -74,7 +74,7 @@
             android:background="@color/colorWhite"
             android:inputType="textMultiLine"
             android:padding="5dp"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:visibility="gone" />
     </ScrollView>
 

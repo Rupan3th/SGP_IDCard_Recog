@@ -1,5 +1,15 @@
 package com.debugger.ocr.activity;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
+import androidx.core.content.ContextCompat;
+
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -18,15 +28,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.core.CameraSelector;
-import androidx.camera.core.ImageAnalysis;
-import androidx.camera.core.ImageProxy;
-import androidx.camera.core.Preview;
-import androidx.camera.lifecycle.ProcessCameraProvider;
-import androidx.camera.view.PreviewView;
-import androidx.core.content.ContextCompat;
-
 import com.debugger.ocr.R;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.common.InputImage;
@@ -39,25 +40,29 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 
-public class CameraActivity extends AppCompatActivity {
+public class CameraPhysicalActivity extends AppCompatActivity {
 
     private PreviewView cameraView;
     private TextView tvLabel;
-    private LinearLayout point_Result;
-    private TextView nric_no;
-    private TextView nric_no_last4;
-    private TextView full_name;
-    private TextView address;
-    private TextView post_code;
-    private EditText etOutput;
+    private TextView card_side;
+    private LinearLayout point_result;
+    private EditText etCardNo;
+    private EditText etName;
+    private EditText etAddress;
+    private LinearLayout switch_side;
     private LinearLayout llButtons;
     private ImageView capture_btn;
     private ViewFinderView viewFinder_View;
-    private static final String TAG = CameraActivity.class.getName();
-    Button bClear, bRegex, bCopy;
+    private static final String TAG = CameraPhysicalActivity.class.getName();
+
+    Button bClear, bCopy, btn_front, btn_back;
     StringBuilder strBuilder1;
-    ScrollView scr;
-    Boolean check = false;
+    Boolean check = true;
+    int side_val = 0;
+
+    String Card_NO = "";
+    String fullName = "";
+    String Address = "";
 
     private void setupCamera() {
         ListenableFuture<ProcessCameraProvider> cameraProviderListenableFuture = ProcessCameraProvider.getInstance(this);
@@ -106,25 +111,31 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
+        setContentView(R.layout.activity_camera_physical);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
         cameraView = findViewById(R.id.surface_view);
         tvLabel = findViewById(R.id.tv_label);
-        point_Result = findViewById(R.id.point_result);
-        nric_no = findViewById(R.id.nric_no);
-        nric_no_last4 = findViewById(R.id.nric_no_last4);
-        full_name = findViewById(R.id.full_name);
-        address = findViewById(R.id.address);
-        post_code = findViewById(R.id.post_code);
-        etOutput = findViewById(R.id.et_output);
+        card_side = findViewById(R.id.card_side);
+        point_result = findViewById(R.id.point_result);
+        etCardNo = findViewById(R.id.et_card_no);
+        etName = findViewById(R.id.et_name);
+        etAddress = findViewById(R.id.et_address);
         bClear = findViewById(R.id.b_clear);
         bCopy = findViewById(R.id.b_copy);
         llButtons = findViewById(R.id.llButtons);
-        bRegex = findViewById(R.id.b_regex);
-        scr = findViewById(R.id.scroll_view);
         capture_btn = findViewById(R.id.capture_btn);
+        switch_side = findViewById(R.id.switch_side);
+        btn_front = findViewById(R.id.btn_front);
+        btn_back = findViewById(R.id.btn_back);
 
         viewFinder_View = new ViewFinderView(this);
-        viewFinder_View.setFrameAspectRatio((float) 0.85, (float) 1.6);
+        viewFinder_View.setFrameAspectRatio((float) 1.6, (float) 0.9);
         viewFinder_View.setFrameSize((float)0.8);
         viewFinder_View.setMaskColor(Color.parseColor("#77000000"));
         viewFinder_View.setFrameColor(Color.parseColor("#FFFFFF"));
@@ -135,24 +146,37 @@ public class CameraActivity extends AppCompatActivity {
                 new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         this.addContentView(viewFinder_View, viewfinder_layoutParams);
 
-        bClear.setOnClickListener(v -> etOutput.setText(""));
-        bRegex.setOnClickListener(v -> check = !check);
-        etOutput.setOnKeyListener((view, i, keyEvent) -> {
-            if(keyEvent.getAction() == KeyEvent.ACTION_DOWN){
-                cameraView.setVisibility(View.VISIBLE);
-                viewFinder_View.setVisibility(View.VISIBLE);
-                point_Result.setVisibility(View.INVISIBLE);
-                capture_btn.setVisibility(View.VISIBLE);
-                tvLabel.setVisibility(View.INVISIBLE);
-                bRegex.setVisibility(View.INVISIBLE);
-                etOutput.setVisibility(View.GONE);
-                llButtons.setVisibility(View.GONE);
-                scr.setVisibility(View.GONE);
-            }
-            return true;
+        bClear.setOnClickListener(v -> {
+            etCardNo.setText("");
+            etName.setText("");
+            etAddress.setText("");
         });
 
+        if(check){
+            cameraView.setVisibility(View.VISIBLE);
+            viewFinder_View.setVisibility(View.VISIBLE);
+            capture_btn.setVisibility(View.VISIBLE);
+            tvLabel.setVisibility(View.VISIBLE);
+            point_result.setVisibility(View.GONE);
+            llButtons.setVisibility(View.GONE);
+            switch_side.setVisibility(View.GONE);
+        }
+
+//        etCardNo.setOnKeyListener((view, i, keyEvent) -> {
+//            if(keyEvent.getAction() == KeyEvent.ACTION_DOWN){
+//                cameraView.setVisibility(View.VISIBLE);
+//                viewFinder_View.setVisibility(View.VISIBLE);
+//                capture_btn.setVisibility(View.VISIBLE);
+//                tvLabel.setVisibility(View.VISIBLE);
+//                point_result.setVisibility(View.GONE);
+//                llButtons.setVisibility(View.GONE);
+//                switch_side.setVisibility(View.GONE);
+//            }
+//            return true;
+//        });
+
         setupCamera();
+
     }
 
     @Override
@@ -170,86 +194,93 @@ public class CameraActivity extends AppCompatActivity {
 
         }
 
-        //Regex Operation
         String str = strBuilder.toString();
         String str2 = str.replace("/", "\n");
         String[] str1 = str2.split("\n");
         strBuilder1 = new StringBuilder();
 
         for (String s : str1) {
-            if (check) {
-                if (s.replace("-", "").matches("^(\\+\\d{1,9}[- ]?)?\\d{10}$")) {
-                    strBuilder1.append(s);
-                    strBuilder1.append("/");
-                }
-            } else {
-                strBuilder1.append(s);
-                strBuilder1.append("/");
-            }
+            strBuilder1.append(s);
+            strBuilder1.append("/");
 
         }
 
-
         tvLabel.post(() -> {
             String scan_result= strBuilder1.toString().toUpperCase();
-            try{
-                if(scan_result.indexOf("Hide detail") > 0)
-                    scan_result = scan_result.substring(0, scan_result.indexOf("Hide detail"));
-                if(scan_result.indexOf("NAME") > 0)
-                    scan_result = scan_result.substring(scan_result.indexOf("NAME"));
+            if(side_val == 0){
+                try{
+                    if(scan_result.indexOf("CARD NO") > 0 && scan_result.indexOf("NAME") > scan_result.indexOf("CARD NO")){
+                        Card_NO = scan_result.substring(scan_result.indexOf("CARD NO")+9,scan_result.indexOf("NAME")-1);
+                        if(scan_result.indexOf("RACE") > scan_result.indexOf("NAME"))
+                            fullName = scan_result.substring(scan_result.indexOf("NAME")+5,scan_result.indexOf("RACE")-1);
+                    }
+                }catch (Exception e){
 
-                String fullName = "";
-                String NRIC_NO = "";
-                if(scan_result.indexOf("NRIC") > 4){
-                    fullName = scan_result.substring(5, scan_result.indexOf("NRIC")-1);
-                    if(scan_result.indexOf("DATE OF BIR") > 0)
-                        NRIC_NO = scan_result.substring(scan_result.indexOf("NRIC")+9, scan_result.indexOf("DATE OF BIR")-1);
                 }
-                full_name.setText(fullName.replace("/", "\n"));
-                nric_no.setText(NRIC_NO);
-                nric_no_last4.setText(NRIC_NO.substring(NRIC_NO.length()-4));
-                String ADDRESS = "";
-                String POSTCODE = "";
+            }
+            else{
+                try{
+                    if(scan_result.indexOf("ADDRESS") > 0)
+                        Address = scan_result.substring(scan_result.indexOf("ADDRESS")+8);
+                    if(Address.indexOf("NRIC") > 0)
+                        Address = Address.substring(0, Address.indexOf("NRIC"));
+                }catch (Exception e){
 
-                if(scan_result.indexOf("ADDRESS") > 0 && scan_result.indexOf("SINGAPORE 8") > 9 && scan_result.indexOf("ADDRESS")+9<scan_result.indexOf("SINGAPORE 8")){
-                    ADDRESS = scan_result.substring(scan_result.indexOf("ADDRESS")+8, scan_result.indexOf("SINGAPORE 8")-1);
-                    POSTCODE = scan_result.substring(scan_result.indexOf("SINGAPORE 8")+10);
                 }
-                address.setText(ADDRESS.replace("/", "\n"));
-                post_code.setText(POSTCODE.substring(0, 6));
-            }catch (Exception e){
-
             }
 
-
-//            tvLabel.setText(scan_result);
+            tvLabel.setText(scan_result);
 //            tvLabel.setOnClickListener(v -> {
             capture_btn.setOnClickListener(v -> {
-                point_Result.setVisibility(View.GONE);
+                if(side_val == 0){
+                    etCardNo.setText(Card_NO);
+                    etName.setText(fullName.replace("/", "\n"));
+                }
+                else {
+                    etAddress.setText(Address.replace("/", "\n"));
+                }
+                check = false;
                 capture_btn.setVisibility(View.GONE);
                 cameraView.setVisibility(View.GONE);
                 viewFinder_View.setVisibility(View.GONE);
                 tvLabel.setVisibility(View.GONE);
-                bRegex.setVisibility(View.GONE);
-                etOutput.setVisibility(View.VISIBLE);
+                point_result.setVisibility(View.VISIBLE);
                 llButtons.setVisibility(View.VISIBLE);
-                scr.setVisibility(View.VISIBLE);
-
-//                String all_number = tvLabel.getText().toString();
-//                all_number = all_number.replace("/", "\n");
-
-                String all_number = "NRIC NO.\n"+nric_no.getText().toString()+"\n"+
-                                    nric_no_last4.getText().toString()+"\n"+ "\nName:\n"+
-                                    full_name.getText().toString()+"\n"+ "\nAddress:\n"+
-                                    address.getText().toString()+"\n"+ "\nPostal Code:\n"+
-                                    post_code.getText().toString();
-
-                etOutput.setText(all_number);
-                etOutput.requestFocus();
+                switch_side.setVisibility(View.VISIBLE);
             });
+
+            btn_front.setOnClickListener(v -> {
+                check = true;
+                side_val = 0;
+                Card_NO = "";
+                fullName = "";
+                card_side.setText(R.string.front_side);
+                cameraView.setVisibility(View.VISIBLE);
+                viewFinder_View.setVisibility(View.VISIBLE);
+                capture_btn.setVisibility(View.VISIBLE);
+                tvLabel.setVisibility(View.VISIBLE);
+                point_result.setVisibility(View.GONE);
+                llButtons.setVisibility(View.GONE);
+                switch_side.setVisibility(View.GONE);
+            });
+
+            btn_back.setOnClickListener(v -> {
+                check = true;
+                side_val = 1;
+                Address = "";
+                card_side.setText(R.string.back_side);
+                cameraView.setVisibility(View.VISIBLE);
+                viewFinder_View.setVisibility(View.VISIBLE);
+                capture_btn.setVisibility(View.VISIBLE);
+                tvLabel.setVisibility(View.VISIBLE);
+                point_result.setVisibility(View.GONE);
+                llButtons.setVisibility(View.GONE);
+                switch_side.setVisibility(View.GONE);
+            });
+
             bCopy.setOnClickListener(v -> {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Copied", etOutput.getText().toString());
+                ClipData clip = ClipData.newPlainText("Copied", etCardNo.getText().toString());
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(getApplicationContext(),"Copied Successfully", Toast.LENGTH_SHORT).show();
             });
@@ -257,5 +288,5 @@ public class CameraActivity extends AppCompatActivity {
         });
     }
 
-}
 
+}
