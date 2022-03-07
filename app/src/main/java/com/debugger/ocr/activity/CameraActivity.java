@@ -125,7 +125,7 @@ public class CameraActivity extends AppCompatActivity {
         etOutput.setOnKeyListener((view, i, keyEvent) -> {
             if(keyEvent.getAction() == KeyEvent.ACTION_DOWN){
                 cameraView.setVisibility(View.VISIBLE);
-                point_Result.setVisibility(View.VISIBLE);
+                point_Result.setVisibility(View.INVISIBLE);
                 capture_btn.setVisibility(View.VISIBLE);
                 tvLabel.setVisibility(View.VISIBLE);
                 bRegex.setVisibility(View.INVISIBLE);
