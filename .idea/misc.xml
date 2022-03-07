@@ -6,6 +6,7 @@
         <entry key="..\:/MyProject15/OCR-Android/app/src/main/res/layout/activity_camera.xml" value="0.327445652173913" />
         <entry key="..\:/MyProject15/OCR-Android/app/src/main/res/layout/activity_gallery.xml" value="0.327445652173913" />
         <entry key="..\:/MyProject15/OCR-Android/app/src/main/res/layout/activity_main.xml" value="0.327445652173913" />
+        <entry key="..\:/MyProject15/SGP_IDCard_Recog/app/src/main/res/layout/activity_camera.xml" value="0.327445652173913" />
         <entry key="..\:/android projects/OCR-Android/app/src/main/res/drawable/bg_button.xml" value="0.37864583333333335" />
         <entry key="..\:/android projects/OCR-Android/app/src/main/res/layout/activity_camera.xml" value="0.358695652173913" />
         <entry key="..\:/android projects/OCR-Android/app/src/main/res/layout/activity_gallery.xml" value="0.35054347826086957" />
@@ -60,7 +61,7 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

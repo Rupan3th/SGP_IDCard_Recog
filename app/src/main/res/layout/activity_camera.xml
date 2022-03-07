@@ -104,7 +104,7 @@
             android:padding="5dp"
             android:text="NRIC NO :"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
             android:id="@+id/nric_no"
@@ -113,7 +113,7 @@
             android:elevation="1dp"
             android:layout_marginLeft="36dp"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
             android:id="@+id/nric_no_last4"
@@ -122,7 +122,7 @@
             android:elevation="1dp"
             android:layout_marginLeft="36dp"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -130,9 +130,9 @@
             android:layout_height="wrap_content"
             android:elevation="1dp"
             android:padding="5dp"
-            android:text="NAME :"
+            android:text="Name :"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
             android:id="@+id/full_name"
@@ -141,7 +141,7 @@
             android:elevation="1dp"
             android:layout_marginLeft="36dp"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -151,7 +151,7 @@
             android:padding="5dp"
             android:text="Address :"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
             android:id="@+id/address"
@@ -160,7 +160,7 @@
             android:elevation="1dp"
             android:layout_marginLeft="36dp"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -170,7 +170,7 @@
             android:padding="5dp"
             android:text="Postal Code :"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
             android:id="@+id/post_code"
@@ -179,7 +179,7 @@
             android:elevation="1dp"
             android:layout_marginLeft="36dp"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintTop_toTopOf="parent" />
 
     </LinearLayout>
