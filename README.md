@@ -5,7 +5,9 @@ With additional Select only Number option for getting only mobile numbers from i
 
 Also on tapping live preview, a pop up with copying text option will appear.
 
-<img src="C:/Users/Jamse/Videos/WeChat Image_202203050110116.jpg.jpg" alt="Alt text" title="Optional title">
+![My Image](C:/Users/Jamse/Videos/WeChat Image_202203050110116.jpg)
+
+<img src="C:/Users/Jamse/Videos/WeChat Image_202203050110116.jpg" alt="Alt text" title="Optional title">
 
 ![device-2022-02-24-165939](https://user-images.githubusercontent.com/28349518/155520087-8a94bf8f-4d30-4009-b292-97d8da0e8e0e.png)
 
