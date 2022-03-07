@@ -173,8 +173,9 @@ public class CameraActivity extends AppCompatActivity {
 
         }
 
+
         tvLabel.post(() -> {
-            String scan_result= strBuilder1.toString();
+            String scan_result= strBuilder1.toString().toUpperCase();
             try{
                 if(scan_result.indexOf("Hide detail") > 0)
                     scan_result = scan_result.substring(0, scan_result.indexOf("Hide detail"));
