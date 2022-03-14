@@ -64,6 +64,9 @@ public class CameraPhysicalActivity extends AppCompatActivity {
     String fullName = "";
     String Address = "";
 
+    private String scan_result="";
+    private String[] scan_result_pl = {"",};
+
     private void setupCamera() {
         ListenableFuture<ProcessCameraProvider> cameraProviderListenableFuture = ProcessCameraProvider.getInstance(this);
 
@@ -136,7 +139,7 @@ public class CameraPhysicalActivity extends AppCompatActivity {
 
         viewFinder_View = new ViewFinderView(this);
         viewFinder_View.setFrameAspectRatio((float) 1.6, (float) 0.9);
-        viewFinder_View.setFrameSize((float)0.8);
+        viewFinder_View.setFrameSize((float)0.85);
         viewFinder_View.setMaskColor(Color.parseColor("#77000000"));
         viewFinder_View.setFrameColor(Color.parseColor("#FFFFFF"));
         viewFinder_View.setFrameCornersSize(660);
@@ -206,24 +209,70 @@ public class CameraPhysicalActivity extends AppCompatActivity {
         }
 
         tvLabel.post(() -> {
-            String scan_result= strBuilder1.toString().toUpperCase();
+            String scan_builder= strBuilder1.toString().toUpperCase();
+
             if(side_val == 0){
+                scan_result = "";
+                if(scan_builder.indexOf("REPUBLIC") > 0)
+                    scan_result = scan_builder.substring(scan_builder.indexOf("REPUBLIC"));
+                else{
+                    if(scan_builder.indexOf("C OF SINGA") > 0)
+                        scan_result = scan_builder.substring(scan_builder.indexOf("C OF SINGA"));
+                }
+                if(scan_result.length() > 2){
+                    viewFinder_View.setFrameColor(Color.parseColor("#02F868"));
+                }
+                else {
+                    viewFinder_View.setFrameColor(Color.parseColor("#D50000"));
+                }
                 try{
-                    if(scan_result.indexOf("CARD NO") > 0 && scan_result.indexOf("NAME") > scan_result.indexOf("CARD NO")){
-                        Card_NO = scan_result.substring(scan_result.indexOf("CARD NO")+9,scan_result.indexOf("NAME")-1);
-                        if(scan_result.indexOf("RACE") > scan_result.indexOf("NAME"))
-                            fullName = scan_result.substring(scan_result.indexOf("NAME")+5,scan_result.indexOf("RACE")-1);
+                    scan_result_pl = scan_result.split("/");
+                    Card_NO = scan_result_pl[1];
+                    Card_NO = Card_NO.substring(Card_NO.length()-10, Card_NO.length());
+                    fullName = scan_result_pl[3];
+                    if(scan_result_pl[4].indexOf("(")>0 || scan_result_pl[4].indexOf(")")>0){
+                        fullName = fullName + "\n" + scan_result_pl[4];
                     }
+
+//                    if(scan_result.indexOf("CARD NO") > 0 && scan_result.indexOf("NAME") > scan_result.indexOf("CARD NO")){
+//                        Card_NO = scan_result.substring(scan_result.indexOf("CARD NO")+9,scan_result.indexOf("NAME")-1);
+//                        if(scan_result.indexOf("RACE") > scan_result.indexOf("NAME"))
+//                            fullName = scan_result.substring(scan_result.indexOf("NAME")+5,scan_result.indexOf("RACE")-1);
+//                    }
                 }catch (Exception e){
 
                 }
             }
             else{
+                scan_result = "";
+                if(scan_builder.indexOf("SINGAPORE") > 0)
+                    scan_result = scan_builder;
+                else{
+                    if(scan_builder.indexOf("APORE") > 0)
+                        scan_result = scan_builder;
+                }
+                if(scan_result.length() > 2){
+                    viewFinder_View.setFrameColor(Color.parseColor("#02F868"));
+                }
+                else {
+                    viewFinder_View.setFrameColor(Color.parseColor("#D50000"));
+                }
+
                 try{
-                    if(scan_result.indexOf("ADDRESS") > 0)
-                        Address = scan_result.substring(scan_result.indexOf("ADDRESS")+8);
-                    if(Address.indexOf("NRIC") > 0)
-                        Address = Address.substring(0, Address.indexOf("NRIC"));
+                    scan_result_pl = scan_result.split("/");
+                    for(int i=1;i<scan_result_pl.length;i++) {
+                        if(scan_result_pl[i].indexOf("SINGAPORE")>=0  || scan_result_pl[i].indexOf("APORE")>=0){
+                            if(scan_result_pl[i-2].length()>7)
+                                Address = scan_result_pl[i-2] + "\n" + scan_result_pl[i-1] + "\n" + scan_result_pl[i];
+                            else
+                                Address = scan_result_pl[i-1] + "\n" + scan_result_pl[i];
+                        }
+                    }
+
+//                    if(scan_result.indexOf("ADDRESS") > 0)
+//                        Address = scan_result.substring(scan_result.indexOf("ADDRESS")+8);
+//                    if(Address.indexOf("NRIC") > 0)
+//                        Address = Address.substring(0, Address.indexOf("NRIC"));
                 }catch (Exception e){
 
                 }
